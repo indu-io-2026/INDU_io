@@ -3,34 +3,15 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, Menu, ChevronDown, ArrowRight, Zap } from "lucide-react";
+import { X, Menu, ChevronDown, ArrowRight, Zap, Sun, Moon } from "lucide-react";
+import { useThemeContext } from "@/components/theme-provider";
 
 const navItems = [
-  {
-    label: "Solutions",
-    href: "/solutions",
-    description: "AI systems for every business function",
-  },
-  {
-    label: "Products",
-    href: "/products",
-    description: "The full INDU platform ecosystem",
-  },
-  {
-    label: "Industries",
-    href: "/industries",
-    description: "Vertical-specific AI automation",
-  },
-  {
-    label: "Why INDU",
-    href: "/why-indu",
-    description: "Traditional vs AI-native operations",
-  },
-  {
-    label: "Pricing",
-    href: "/pricing",
-    description: "ROI-driven deployment plans",
-  },
+  { label: "Solutions", href: "/solutions" },
+  { label: "Products", href: "/products" },
+  { label: "Industries", href: "/industries" },
+  { label: "Why INDU", href: "/why-indu" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 const moreItems = [
@@ -45,6 +26,7 @@ export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const pathname = usePathname();
+  const { theme, toggleTheme, mounted } = useThemeContext();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -67,11 +49,13 @@ export function SiteHeader() {
           right: 0,
           zIndex: 1000,
           transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
-          background: scrolled
-            ? "rgba(11, 15, 25, 0.92)"
-            : "transparent",
-          backdropFilter: scrolled ? "blur(20px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.07)" : "1px solid transparent",
+          background: scrolled ? "var(--header-bg-scrolled)" : "var(--header-bg)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: scrolled
+            ? "1px solid var(--header-border)"
+            : "1px solid transparent",
+          boxShadow: scrolled ? "var(--shadow-sm)" : "none",
         }}
       >
         <div
@@ -98,11 +82,11 @@ export function SiteHeader() {
                 width: "32px",
                 height: "32px",
                 borderRadius: "8px",
-                background: "linear-gradient(135deg, #FF7A00, #FF9A3C)",
+                background: "linear-gradient(135deg, var(--accent-orange), var(--accent-orange-glow))",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 20px rgba(255,122,0,0.4)",
+                boxShadow: "var(--logo-glow)",
               }}
             >
               <Zap size={18} fill="white" color="white" />
@@ -113,7 +97,7 @@ export function SiteHeader() {
                 fontWeight: 800,
                 fontSize: "1.25rem",
                 letterSpacing: "-0.03em",
-                color: "#fff",
+                color: "var(--text-primary)",
               }}
             >
               INDU
@@ -122,17 +106,14 @@ export function SiteHeader() {
 
           {/* Desktop Nav */}
           <nav
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.25rem",
-            }}
+            style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}
             className="desktop-nav"
           >
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
+                className="nav-link"
                 style={{
                   fontSize: "0.9rem",
                   fontWeight: 500,
@@ -146,18 +127,6 @@ export function SiteHeader() {
                     ? "var(--accent-orange-dim)"
                     : "transparent",
                   textDecoration: "none",
-                }}
-                onMouseEnter={(e) => {
-                  if (pathname !== item.href) {
-                    (e.target as HTMLElement).style.color = "#fff";
-                    (e.target as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (pathname !== item.href) {
-                    (e.target as HTMLElement).style.color = "var(--text-secondary)";
-                    (e.target as HTMLElement).style.background = "transparent";
-                  }
                 }}
               >
                 {item.label}
@@ -199,13 +168,13 @@ export function SiteHeader() {
                     top: "calc(100% + 8px)",
                     left: "50%",
                     transform: "translateX(-50%)",
-                    background: "rgba(15, 23, 42, 0.98)",
-                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "var(--dropdown-bg)",
+                    border: "1px solid var(--border)",
                     borderRadius: "12px",
                     padding: "0.5rem",
                     minWidth: "200px",
                     backdropFilter: "blur(20px)",
-                    boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+                    boxShadow: "var(--shadow-elevated)",
                     zIndex: 100,
                   }}
                 >
@@ -213,6 +182,7 @@ export function SiteHeader() {
                     <Link
                       key={item.href}
                       href={item.href}
+                      className="dropdown-link"
                       style={{
                         display: "block",
                         padding: "0.625rem 0.875rem",
@@ -221,14 +191,6 @@ export function SiteHeader() {
                         color: "var(--text-secondary)",
                         transition: "all 0.2s ease",
                         textDecoration: "none",
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.color = "#fff";
-                        (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
-                        (e.currentTarget as HTMLElement).style.background = "transparent";
                       }}
                     >
                       {item.label}
@@ -239,10 +201,24 @@ export function SiteHeader() {
             </div>
           </nav>
 
-          {/* Desktop CTA */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }} className="desktop-nav">
+          {/* Desktop Right */}
+          <div
+            style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}
+            className="desktop-nav"
+          >
+            {/* Theme Toggle */}
+            <button
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+              title={mounted ? `Switch to ${theme === "light" ? "dark" : "light"} mode` : "Toggle theme"}
+            >
+              {mounted && theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+
             <Link
               href="/contact"
+              className="nav-link"
               style={{
                 fontSize: "0.875rem",
                 color: "var(--text-secondary)",
@@ -250,12 +226,6 @@ export function SiteHeader() {
                 textDecoration: "none",
                 transition: "color 0.2s ease",
               }}
-              onMouseEnter={(e) =>
-                ((e.target as HTMLElement).style.color = "#fff")
-              }
-              onMouseLeave={(e) =>
-                ((e.target as HTMLElement).style.color = "var(--text-secondary)")
-              }
             >
               Contact
             </Link>
@@ -270,23 +240,32 @@ export function SiteHeader() {
           </div>
 
           {/* Mobile Toggle */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            style={{
-              display: "none",
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "8px",
-              padding: "0.5rem",
-              cursor: "pointer",
-              color: "#fff",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            id="mobile-menu-btn"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          <div style={{ display: "none", alignItems: "center", gap: "0.5rem" }} id="mobile-actions">
+            <button
+              className="theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle theme"
+            >
+              {mounted && theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
+            </button>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              style={{
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                padding: "0.5rem",
+                cursor: "pointer",
+                color: "var(--text-primary)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+              id="mobile-menu-btn"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -299,11 +278,11 @@ export function SiteHeader() {
             left: 0,
             right: 0,
             bottom: 0,
-            background: "rgba(11, 15, 25, 0.98)",
+            background: "var(--mobile-menu-bg)",
             backdropFilter: "blur(20px)",
             zIndex: 999,
             padding: "1.5rem",
-            borderTop: "1px solid rgba(255,255,255,0.07)",
+            borderTop: "1px solid var(--border)",
             overflowY: "auto",
           }}
         >
@@ -319,8 +298,8 @@ export function SiteHeader() {
                   padding: "1rem",
                   borderRadius: "10px",
                   color: pathname === item.href ? "var(--accent-orange)" : "var(--text-primary)",
-                  background: pathname === item.href ? "var(--accent-orange-dim)" : "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  background: pathname === item.href ? "var(--accent-orange-dim)" : "var(--bg-elevated)",
+                  border: "1px solid var(--border-subtle)",
                   textDecoration: "none",
                   fontWeight: 500,
                   fontSize: "1rem",
@@ -352,9 +331,17 @@ export function SiteHeader() {
       )}
 
       <style>{`
+        .nav-link:hover {
+          color: var(--text-primary) !important;
+          background: var(--bg-elevated) !important;
+        }
+        .dropdown-link:hover {
+          color: var(--text-primary) !important;
+          background: var(--bg-elevated) !important;
+        }
         @media (max-width: 900px) {
           .desktop-nav { display: none !important; }
-          #mobile-menu-btn { display: flex !important; }
+          #mobile-actions { display: flex !important; }
         }
       `}</style>
 

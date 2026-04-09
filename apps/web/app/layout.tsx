@@ -15,6 +15,10 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://indu.io"),
+  alternates: {
+    canonical: '/',
+  },
   title: {
     default: "INDU — Deploy AI Systems That Run Your Business",
     template: "%s | INDU",
@@ -61,7 +65,69 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('indu-theme');
+                  if (t === 'dark') {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                  } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                  }
+                } catch(e) {
+                  document.documentElement.setAttribute('data-theme', 'light');
+                }
+              })();
+            `,
+          }}
+        />
+        {/* SEO: JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Organization",
+                  "@id": "https://indu.io/#organization",
+                  "name": "INDU",
+                  "url": "https://indu.io",
+                  "logo": "https://indu.io/turborepo-dark.svg",
+                  "sameAs": [
+                    "https://twitter.com/indu_io",
+                    "https://linkedin.com/company/indu-io",
+                    "https://github.com/indu-io"
+                  ]
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://indu.io/#website",
+                  "url": "https://indu.io",
+                  "name": "INDU",
+                  "publisher": {
+                    "@id": "https://indu.io/#organization"
+                  },
+                  "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://indu.io/search?q={search_term_string}",
+                    "query-input": "required name=search_term_string"
+                  }
+                }
+              ]
+            })
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
