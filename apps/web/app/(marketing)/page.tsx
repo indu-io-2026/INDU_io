@@ -31,21 +31,48 @@ import { LiveSystemPreview } from "@/components/ui/live-system-preview";
 import { AnimatedCounter } from "@/components/ui/animated-counter";
 import { caseStudies } from "../../data/case-studies";
 import Image from "next/image";
-/* ── Animation helpers ──────────────────────────────── */
+
+/* ── Animation helpers — VARIED, not identical ─────── */
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.6, ease: [0.4, 0, 0.2, 1] as any },
+    transition: { delay: i * 0.08, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
   }),
-};
+} as any;
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: (i: number) => ({
+    opacity: 1,
+    transition: { delay: i * 0.1, duration: 0.6 },
+  }),
+} as any;
+
+const slideRight = {
+  hidden: { opacity: 0, x: -32 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+} as any;
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.96 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: { delay: i * 0.1, duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  }),
+} as any;
 
 const stagger = {
-  visible: { transition: { staggerChildren: 0.08 } },
+  visible: { transition: { staggerChildren: 0.06 } },
 };
 
-/* ── Data ───────────────────────────────────────────── */
+/* ── Data ─────────────────────────────────────────── */
 const logos = [
   "TechFlow", "Axiom", "ScaleOps", "NexGen", "PulseAI",
   "Quantum", "VeloCity", "Praxis",
@@ -57,28 +84,28 @@ const coreSystems = [
     title: "AI Agents",
     desc: "Autonomous agents that handle sales, support, and operations without human intervention.",
     stat: "60% reduction in support tickets",
-    color: "#FF7A00",
+    color: "var(--accent-orange)",
   },
   {
     icon: Workflow,
     title: "Workflow Automation",
     desc: "End-to-end automated workflows that replace manual processes across your organization.",
     stat: "40+ hrs saved per week",
-    color: "#3B82F6",
+    color: "var(--accent-blue)",
   },
   {
     icon: Layers,
     title: "SaaS Platforms",
     desc: "Custom-built AI-powered platforms tailored to your industry and business model.",
     stat: "10x faster operations",
-    color: "#8B5CF6",
+    color: "var(--accent-purple)",
   },
   {
     icon: Plug,
     title: "Integration Engine",
     desc: "Seamless connections to CRM, ERP, APIs, and 200+ tools in your existing stack.",
     stat: "200+ integrations",
-    color: "#22C55E",
+    color: "var(--accent-green)",
   },
 ];
 
@@ -121,7 +148,7 @@ const howItWorks = [
   {
     step: "01",
     title: "Discovery & Audit",
-    desc: "We map your current workflows, identify automation opportunities, and quantify ROI potential.",
+    desc: "We map your workflows, identify automation opportunities, and quantify ROI potential.",
   },
   {
     step: "02",
@@ -136,7 +163,7 @@ const howItWorks = [
   {
     step: "04",
     title: "Optimize & Scale",
-    desc: "Continuous monitoring, optimization, and expansion. Your AI system gets smarter over time.",
+    desc: "Continuous monitoring, optimization, and expansion. Your system gets smarter over time.",
   },
 ];
 
@@ -146,26 +173,21 @@ const integrations = [
   "Twilio", "Intercom", "Jira", "GitHub", "PostgreSQL", "MongoDB",
 ];
 
-
-
 const trustSignals = [
-  { icon: Shield, title: "Enterprise Security", desc: "SOC 2 Type II compliant infrastructure with end-to-end encryption at rest and in transit." },
-  { icon: Server, title: "99.9% Uptime SLA", desc: "Distributed systems architecture with auto-failover and real-time monitoring." },
-  { icon: Lock, title: "Data Privacy", desc: "GDPR-ready. Your data never trains our models. Full data sovereignty." },
-  { icon: Globe, title: "Global Scale", desc: "Deploy across regions with edge computing for sub-100ms response times." },
+  { icon: Shield, title: "Enterprise Security", desc: "SOC 2 Type II compliant infrastructure with end-to-end encryption." },
+  { icon: Server, title: "99.9% Uptime SLA", desc: "Distributed systems with auto-failover and real-time monitoring." },
+  { icon: Lock, title: "Data Privacy", desc: "GDPR-ready. Your data never trains our models. Full sovereignty." },
+  { icon: Globe, title: "Global Scale", desc: "Edge computing across regions for sub-100ms response times." },
 ];
 
 export default function HomePage() {
   return (
     <>
-      {/* ═══════════════════════════════════════════════════
-          HERO
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  HERO  ═══════════════ */}
       <section
         className="section-lg"
         style={{ position: "relative", overflow: "hidden" }}
       >
-        {/* Background effects */}
         <div
           className="glow-blob glow-blob-orange"
           style={{ top: "-200px", right: "-100px", opacity: 0.5 }}
@@ -177,20 +199,9 @@ export default function HomePage() {
         <div className="bg-grid" style={{ position: "absolute", inset: 0, opacity: 0.4 }} />
 
         <div className="container" style={{ position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "4rem",
-              alignItems: "center",
-            }}
-          >
+          <div className="hero-grid">
             {/* Left */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={stagger}
-            >
+            <motion.div initial="hidden" animate="visible" variants={stagger}>
               <motion.div variants={fadeUp} custom={0}>
                 <div className="section-label">AI Infrastructure Platform</div>
               </motion.div>
@@ -263,13 +274,8 @@ export default function HomePage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              style={{
-                background: "var(--bg-card)",
-                border: "1px solid var(--border)",
-                borderRadius: "20px",
-                padding: "2rem",
-                position: "relative",
-              }}
+              className="card-glass"
+              style={{ padding: "2rem", borderRadius: "20px" }}
             >
               <div
                 style={{
@@ -290,7 +296,7 @@ export default function HomePage() {
                     alignItems: "center",
                     gap: "0.375rem",
                     fontSize: "0.7rem",
-                    color: "#22C55E",
+                    color: "var(--accent-green)",
                   }}
                 >
                   <span
@@ -298,7 +304,7 @@ export default function HomePage() {
                       width: "6px",
                       height: "6px",
                       borderRadius: "50%",
-                      background: "#22C55E",
+                      background: "var(--accent-green)",
                       display: "inline-block",
                       animation: "pulse-dot 1.5s ease-in-out infinite",
                     }}
@@ -312,80 +318,53 @@ export default function HomePage() {
         </div>
 
         <style>{`
+          .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+          }
           @media (max-width: 900px) {
-            .container > div { grid-template-columns: 1fr !important; }
+            .hero-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>
       </section>
 
-      {/* ═══════════════════════════════════════════════════
-          SOCIAL PROOF
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  SOCIAL PROOF — Styled logos  ═══════════════ */}
       <section style={{ paddingBottom: "80px" }}>
         <div className="container text-center">
           <p className="body-sm" style={{ marginBottom: "2rem" }}>
             Trusted by forward-thinking teams
           </p>
-          <div className="logo-grid">
-            {logos.map((name) => (
-              <span key={name} className="logo-item">
-                {name}
-              </span>
-            ))}
+          <div className="marquee-container">
+            <div className="marquee-track">
+              {[...logos, ...logos].map((name, i) => (
+                <span
+                  key={`${name}-${i}`}
+                  style={{
+                    fontFamily: "var(--font-heading)",
+                    fontSize: "1.125rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.06em",
+                    color: "var(--text-muted)",
+                    textTransform: "uppercase",
+                    opacity: 0.45,
+                    padding: "0.5rem 2rem",
+                    whiteSpace: "nowrap",
+                    userSelect: "none",
+                  }}
+                >
+                  {name}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       <div className="divider container" />
 
-      {/* ═══════════════════════════════════════════════════
-          PLATFORM IMPACT (PROOF LAYER)
-         ═══════════════════════════════════════════════════ */}
-      <motion.section
-        className="section"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={stagger}
-      >
-        <div className="container text-center">
-          <motion.div variants={fadeUp} custom={0}>
-            <div className="section-label" style={{ display: "inline-flex" }}>
-              Platform Impact
-            </div>
-          </motion.div>
-          <motion.h2
-            className="section-title"
-            variants={fadeUp}
-            custom={1}
-            style={{ marginBottom: "3.5rem" }}
-          >
-            Real results from <span className="gradient-text">intelligent systems</span>
-          </motion.h2>
-
-          <motion.div variants={fadeUp} custom={2} className="metrics-grid" style={{ maxWidth: "900px", margin: "0 auto" }}>
-            {[
-              { value: 120, suffix: "+", label: "Autonomous workflows deployed" },
-              { value: 40, suffix: "%", label: "Average cost reduction" },
-              { value: 10, suffix: "x", label: "Faster operations" },
-              { value: 98, suffix: "%", label: "System uptime" },
-              { value: 200, suffix: "+", label: "Integrations supported" },
-              { value: 2, suffix: "M+", label: "Tasks automated monthly" },
-            ].map((m) => (
-              <div className="metric-cell" key={m.label}>
-                <div className="stat-number">
-                  <AnimatedCounter end={m.value} suffix={m.suffix} />
-                </div>
-                <div className="stat-label">{m.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </motion.section>
-
-      {/* ═══════════════════════════════════════════════════
-          CORE SYSTEMS
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  CORE SYSTEMS — Staggered layout  ═══════════════ */}
       <motion.section
         className="section"
         style={{ background: "var(--bg-secondary)" }}
@@ -400,7 +379,8 @@ export default function HomePage() {
               <div className="section-label" style={{ display: "inline-flex" }}>Core Systems</div>
             </motion.div>
             <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              The building blocks of <span className="gradient-text">autonomous operations</span>
+              The building blocks of{" "}
+              <span className="gradient-text-subtle">autonomous operations</span>
             </motion.h2>
             <motion.p className="body-lg" variants={fadeUp} custom={2} style={{ maxWidth: "600px", margin: "1rem auto 0" }}>
               Four interconnected systems that replace manual work with intelligent automation.
@@ -413,25 +393,23 @@ export default function HomePage() {
               return (
                 <motion.div
                   key={sys.title}
-                  variants={fadeUp}
+                  variants={scaleIn}
                   custom={i + 3}
-                  className="card"
+                  className="card-accent"
                   style={{ textAlign: "left" }}
                 >
                   <div
-                    className="icon-box-lg"
                     style={{
-                      background: `${sys.color}15`,
-                      borderColor: `${sys.color}40`,
-                      color: sys.color,
-                      marginBottom: "1.25rem",
                       width: "56px",
                       height: "56px",
                       borderRadius: "14px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      border: `1px solid ${sys.color}40`,
+                      background: `color-mix(in srgb, ${sys.color} 10%, transparent)`,
+                      border: `1px solid color-mix(in srgb, ${sys.color} 25%, transparent)`,
+                      color: sys.color,
+                      marginBottom: "1.25rem",
                     }}
                   >
                     <Icon size={24} />
@@ -462,9 +440,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          USE CASES
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  PLATFORM IMPACT — Clean grid  ═══════════════ */}
       <motion.section
         className="section"
         initial="hidden"
@@ -472,13 +448,50 @@ export default function HomePage() {
         viewport={{ once: true, amount: 0.2 }}
         variants={stagger}
       >
+        <div className="container text-center">
+          <motion.div variants={fadeIn} custom={0}>
+            <div className="section-label-minimal">Platform Impact</div>
+          </motion.div>
+          <motion.h2 className="section-title" variants={fadeUp} custom={1} style={{ marginBottom: "3.5rem" }}>
+            Real results from intelligent systems
+          </motion.h2>
+
+          <motion.div variants={fadeUp} custom={2} className="metrics-grid" style={{ maxWidth: "900px", margin: "0 auto" }}>
+            {[
+              { value: 120, suffix: "+", label: "Autonomous workflows deployed" },
+              { value: 40, suffix: "%", label: "Average cost reduction" },
+              { value: 10, suffix: "x", label: "Faster operations" },
+              { value: 98, suffix: "%", label: "System uptime" },
+              { value: 200, suffix: "+", label: "Integrations supported" },
+              { value: 2, suffix: "M+", label: "Tasks automated monthly" },
+            ].map((m) => (
+              <div className="metric-cell" key={m.label}>
+                <div className="stat-number">
+                  <AnimatedCounter end={m.value} suffix={m.suffix} />
+                </div>
+                <div className="stat-label">{m.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* ═══════════════  USE CASES — Alternating editorial  ═══════════════ */}
+      <motion.section
+        className="section-editorial"
+        style={{ background: "var(--bg-secondary)" }}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.15 }}
+        variants={stagger}
+      >
         <div className="container">
           <div className="text-center" style={{ marginBottom: "4rem" }}>
             <motion.div variants={fadeUp} custom={0}>
-              <div className="section-label" style={{ display: "inline-flex" }}>Use Cases</div>
+              <div className="section-label-blue" style={{ display: "inline-flex" }}>Use Cases</div>
             </motion.div>
             <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              Intelligent automation for <span className="gradient-text">every function</span>
+              Intelligent automation for every function
             </motion.h2>
           </div>
 
@@ -488,15 +501,12 @@ export default function HomePage() {
               return (
                 <motion.div
                   key={uc.label}
-                  variants={fadeUp}
+                  variants={slideRight}
                   custom={i + 2}
                   className="card"
                   style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start" }}
                 >
-                  <div
-                    className="icon-box"
-                    style={{ flexShrink: 0 }}
-                  >
+                  <div className="icon-box" style={{ flexShrink: 0 }}>
                     <Icon size={20} />
                   </div>
                   <div style={{ flex: 1 }}>
@@ -509,13 +519,7 @@ export default function HomePage() {
                     <p className="body-md" style={{ marginBottom: "1rem" }}>
                       {uc.desc}
                     </p>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        gap: "0.5rem",
-                      }}
-                    >
+                    <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
                       <span
                         style={{
                           fontFamily: "var(--font-heading)",
@@ -539,12 +543,9 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          HOW IT WORKS
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  HOW IT WORKS — Vertical Timeline  ═══════════════ */}
       <motion.section
         className="section"
-        style={{ background: "var(--bg-secondary)" }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -553,79 +554,54 @@ export default function HomePage() {
         <div className="container">
           <div className="text-center" style={{ marginBottom: "4rem" }}>
             <motion.div variants={fadeUp} custom={0}>
-              <div className="section-label" style={{ display: "inline-flex" }}>How It Works</div>
+              <div className="section-label-minimal">Process</div>
             </motion.div>
             <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              From audit to <span className="gradient-text">autonomous systems</span> in weeks
+              From audit to{" "}
+              <span className="gradient-text">autonomous systems</span> in weeks
             </motion.h2>
             <motion.p className="body-lg" variants={fadeUp} custom={2} style={{ maxWidth: 560, margin: "1rem auto 0" }}>
               A proven 4-step process to deploy AI systems that scale your operations.
             </motion.p>
           </div>
 
-          <div className="grid-4">
+          <div className="timeline">
             {howItWorks.map((step, i) => (
               <motion.div
                 key={step.step}
-                variants={fadeUp}
+                className="timeline-item"
+                variants={slideRight}
                 custom={i + 3}
-                style={{
-                  position: "relative",
-                  textAlign: "center",
-                  padding: "2rem 1.25rem",
-                }}
               >
-                <div
-                  style={{
-                    fontFamily: "var(--font-heading)",
-                    fontWeight: 800,
-                    fontSize: "3rem",
-                    letterSpacing: "-0.04em",
-                    color: "var(--accent-orange)",
-                    opacity: 0.2,
-                    lineHeight: 1,
-                    marginBottom: "1rem",
-                  }}
-                >
-                  {step.step}
-                </div>
-                <h3
-                  className="card-title"
-                  style={{ marginBottom: "0.75rem" }}
-                >
-                  {step.title}
-                </h3>
-                <p className="body-md">{step.desc}</p>
-                {i < howItWorks.length - 1 && (
-                  <ChevronRight
-                    size={20}
+                <div className="timeline-marker">
+                  <div
+                    className="timeline-dot"
                     style={{
-                      position: "absolute",
-                      right: "-10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      color: "var(--text-muted)",
-                      opacity: 0.5,
+                      background: "var(--accent-orange-dim)",
+                      border: "2px solid var(--accent-orange-border)",
+                      color: "var(--accent-orange)",
                     }}
-                    className="how-it-works-arrow"
-                  />
-                )}
+                  >
+                    {step.step}
+                  </div>
+                  {i < howItWorks.length - 1 && <div className="timeline-line" />}
+                </div>
+                <div className="timeline-content">
+                  <h3 className="card-title" style={{ marginBottom: "0.5rem" }}>
+                    {step.title}
+                  </h3>
+                  <p className="body-md">{step.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
-        <style>{`
-          @media (max-width: 1024px) {
-            .how-it-works-arrow { display: none; }
-          }
-        `}</style>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          LIVE SYSTEM PREVIEW
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  LIVE SYSTEM PREVIEW  ═══════════════ */}
       <motion.section
         className="section"
+        style={{ background: "var(--bg-secondary)" }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -643,18 +619,15 @@ export default function HomePage() {
               Watch how an INDU system processes a lead — from capture to CRM sync to personalized outreach — in seconds.
             </motion.p>
           </div>
-          <motion.div variants={fadeUp} custom={3}>
+          <motion.div variants={scaleIn} custom={3}>
             <LiveSystemPreview />
           </motion.div>
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          INTEGRATIONS
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  INTEGRATIONS — Marquee  ═══════════════ */}
       <motion.section
         className="section-sm"
-        style={{ background: "var(--bg-secondary)" }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -662,10 +635,10 @@ export default function HomePage() {
       >
         <div className="container text-center">
           <motion.div variants={fadeUp} custom={0}>
-            <div className="section-label" style={{ display: "inline-flex" }}>Integrations</div>
+            <div className="section-label-minimal">Integrations</div>
           </motion.div>
           <motion.h2 className="section-title" variants={fadeUp} custom={1} style={{ marginBottom: "1rem" }}>
-            Plug into <span className="gradient-text">your stack</span>
+            Plug into your stack
           </motion.h2>
           <motion.p className="body-lg" variants={fadeUp} custom={2} style={{ maxWidth: 500, margin: "0 auto 3rem" }}>
             200+ native integrations. Connect every tool in your ecosystem.
@@ -683,7 +656,11 @@ export default function HomePage() {
             }}
           >
             {integrations.map((name) => (
-              <span key={name} className="badge badge-gray" style={{ padding: "0.5rem 1rem", fontSize: "0.8125rem" }}>
+              <span
+                key={name}
+                className="badge badge-gray"
+                style={{ padding: "0.5rem 1rem", fontSize: "0.8125rem", cursor: "default" }}
+              >
                 {name}
               </span>
             ))}
@@ -691,9 +668,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          TRANSFORMATION ENGINE
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  TRANSFORMATION ENGINE  ═══════════════ */}
       <motion.section
         className="section"
         style={{ background: "var(--bg-secondary)" }}
@@ -708,11 +683,12 @@ export default function HomePage() {
               <div className="section-label" style={{ display: "inline-flex" }}>Transformation Engine</div>
             </motion.div>
             <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              Before INDU vs <span className="gradient-text">after INDU</span>
+              Before vs{" "}
+              <span className="gradient-text-subtle">after INDU</span>
             </motion.h2>
           </div>
 
-          <motion.div variants={fadeUp} custom={2} style={{ maxWidth: 900, margin: "0 auto" }}>
+          <motion.div variants={scaleIn} custom={2} style={{ maxWidth: 900, margin: "0 auto" }}>
             <table className="comparison-table">
               <thead>
                 <tr>
@@ -750,9 +726,7 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          REAL SYSTEMS DEPLOYED
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  REAL SYSTEMS DEPLOYED  ═══════════════ */}
       <motion.section
         className="section"
         initial="hidden"
@@ -763,10 +737,10 @@ export default function HomePage() {
         <div className="container">
           <div className="text-center" style={{ marginBottom: "4rem" }}>
             <motion.div variants={fadeUp} custom={0}>
-              <div className="section-label" style={{ display: "inline-flex" }}>Proven Architectures</div>
+              <div className="section-label-blue" style={{ display: "inline-flex" }}>Proven Architectures</div>
             </motion.div>
             <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              Real deployed <span className="gradient-text">production systems</span>
+              Real deployed production systems
             </motion.h2>
           </div>
 
@@ -780,18 +754,17 @@ export default function HomePage() {
                 style={{ display: "flex", flexDirection: "column", padding: 0, overflow: "hidden" }}
               >
                 {/* Preview Image */}
-                <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", backgroundColor: "rgba(0,0,0,0.5)", borderBottom: "1px solid var(--border)" }}>
+                <div style={{ position: "relative", width: "100%", aspectRatio: "4/3", backgroundColor: "var(--bg-tertiary)", borderBottom: "1px solid var(--border)" }}>
                   <Image
                     src={cs.images[0] || ''}
                     alt={cs.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 400px"
                     style={{ objectFit: "cover" }}
-                    className="case-study-img"
                   />
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "6rem", background: "linear-gradient(to top, var(--bg-card), transparent)" }} />
-                  <div style={{ position: "absolute", top: "1rem", left: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.25rem 0.75rem", borderRadius: "100px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", border: "1px solid var(--border)" }}>
-                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22C55E" }} />
+                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "6rem", background: "linear-gradient(to top, var(--bg-card-solid), transparent)" }} />
+                  <div style={{ position: "absolute", top: "1rem", left: "1rem", display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.25rem 0.75rem", borderRadius: "100px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                    <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "var(--accent-green)" }} />
                     <span style={{ fontSize: "0.75rem", fontFamily: "var(--font-mono)", fontWeight: 500, color: "rgba(255,255,255,0.9)", textTransform: "uppercase", letterSpacing: "0.05em" }}>{cs.category}</span>
                   </div>
                 </div>
@@ -812,68 +785,74 @@ export default function HomePage() {
             ))}
           </div>
           
-          <div className="text-center mt-12">
+          <div className="text-center" style={{ marginTop: "3rem" }}>
             <Link href="/case-studies" className="btn btn-secondary">
-              View All Deployed Systems <ArrowRight size={14} className="ml-2"/>
+              View All Deployed Systems <ArrowRight size={14} />
             </Link>
           </div>
         </div>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          TRUST LAYER
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  TRUST LAYER — Different layout  ═══════════════ */}
       <motion.section
         className="section"
+        style={{ background: "var(--bg-secondary)" }}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
         variants={stagger}
       >
         <div className="container">
-          <div className="text-center" style={{ marginBottom: "4rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "4rem", alignItems: "start" }} className="trust-layout">
             <motion.div variants={fadeUp} custom={0}>
               <div className="section-label" style={{ display: "inline-flex" }}>Enterprise Ready</div>
+              <h2 className="section-title" style={{ marginTop: "0.5rem" }}>
+                Built for enterprise trust
+              </h2>
+              <p className="body-lg" style={{ marginTop: "1rem" }}>
+                Security, compliance, and reliability built into every layer of the platform.
+              </p>
             </motion.div>
-            <motion.h2 className="section-title" variants={fadeUp} custom={1}>
-              Built for <span className="gradient-text">enterprise trust</span>
-            </motion.h2>
-          </div>
 
-          <div className="grid-4">
-            {trustSignals.map((ts, i) => {
-              const Icon = ts.icon;
-              return (
-                <motion.div key={ts.title} variants={fadeUp} custom={i + 2} className="card" style={{ textAlign: "center" }}>
-                  <div
-                    className="icon-box"
-                    style={{
-                      margin: "0 auto 1rem",
-                      width: "56px",
-                      height: "56px",
-                      borderRadius: "14px",
-                    }}
-                  >
-                    <Icon size={24} />
-                  </div>
-                  <h3 className="card-title" style={{ marginBottom: "0.5rem" }}>{ts.title}</h3>
-                  <p className="body-md">{ts.desc}</p>
-                </motion.div>
-              );
-            })}
+            <div className="grid-2" style={{ gap: "1rem" }}>
+              {trustSignals.map((ts, i) => {
+                const Icon = ts.icon;
+                return (
+                  <motion.div key={ts.title} variants={fadeUp} custom={i + 1} className="card-glass" style={{ padding: "1.5rem" }}>
+                    <div
+                      className="icon-box"
+                      style={{
+                        marginBottom: "1rem",
+                        width: "44px",
+                        height: "44px",
+                        borderRadius: "10px",
+                      }}
+                    >
+                      <Icon size={20} />
+                    </div>
+                    <h3 style={{ fontSize: "1.0625rem", fontWeight: 600, fontFamily: "var(--font-heading)", marginBottom: "0.375rem" }}>{ts.title}</h3>
+                    <p className="body-md" style={{ fontSize: "0.9rem" }}>{ts.desc}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
           </div>
         </div>
+
+        <style>{`
+          @media (max-width: 900px) {
+            .trust-layout { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
       </motion.section>
 
-      {/* ═══════════════════════════════════════════════════
-          FINAL CTA
-         ═══════════════════════════════════════════════════ */}
+      {/* ═══════════════  FINAL CTA  ═══════════════ */}
       <section
         className="section-lg"
         style={{
           position: "relative",
           overflow: "hidden",
-          background: "linear-gradient(180deg, var(--bg-primary), #080c14)",
+          background: "linear-gradient(180deg, var(--bg-primary), var(--bg-secondary))",
         }}
       >
         <div className="glow-blob glow-blob-orange" style={{ top: "-150px", left: "50%", transform: "translateX(-50%)", opacity: 0.4 }} />
