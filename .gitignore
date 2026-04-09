@@ -36,3 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# AI Agent Context
+.agent/
+.agents/
+_agent/
+_agents/
+.gemini/

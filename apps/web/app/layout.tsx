@@ -47,7 +47,7 @@ export const metadata: Metadata = {
       "Automate workflows, deploy AI agents, and scale operations intelligently. Enterprise-grade AI infrastructure for modern businesses.",
   },
   icons: {
-    icon: '/LOGO.png',
+    icon: '/favicon.svg',
   },
   twitter: {
     card: "summary_large_image",
